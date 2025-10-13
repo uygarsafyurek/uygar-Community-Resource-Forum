@@ -1,5 +1,5 @@
 import { createId } from "@paralleldrive/cuid2";
-import { SQL, sql } from "drizzle-orm";
+import { type SQL, sql } from "drizzle-orm";
 import {
   foreignKey,
   index,
@@ -8,7 +8,7 @@ import {
   timestamp,
   uniqueIndex,
   varchar,
-  type AnyMySqlColumn
+  type AnyMySqlColumn,
 } from "drizzle-orm/mysql-core";
 import { relations } from "drizzle-orm/relations";
 
@@ -26,6 +26,13 @@ export const events = mysqlTable("event", (d) => ({
   location: d.varchar({ length: 255 }),
 }));
 
+export const eventsRelations = relations(events, ({ one }) => ({
+  profile: one(profiles, {
+    fields: [events.organizerId],
+    references: [profiles.id],
+  }),
+}));
+
 export const posts = mysqlTable(
   "post",
   (d) => ({
@@ -36,6 +43,7 @@ export const posts = mysqlTable(
       .notNull()
       .references(() => profiles.id),
     eventId: d.varchar({ length: 255 }).references(() => events.id),
+    likeCount: d.int().notNull().default(0),
     createdAt: d.timestamp().defaultNow().notNull(),
     updatedAt: d.timestamp().onUpdateNow(),
   }),
@@ -54,6 +62,21 @@ export const postsRelations = relations(posts, ({ one, many }) => ({
     references: [events.id],
   }),
 }));
+
+export const likes = mysqlTable(
+  "like",
+  (d) => ({
+    userId: d
+      .varchar({ length: 255 })
+      .notNull()
+      .references(() => users.id),
+    postId: d
+      .varchar({ length: 255 })
+      .notNull()
+      .references(() => posts.id),
+  }),
+  (t) => [primaryKey({ columns: [t.userId, t.postId] })],
+);
 
 export const replies = mysqlTable(
   "reply",
@@ -89,8 +112,9 @@ export const repliesRelations = relations(replies, ({ one, many }) => ({
   parent: one(replies, {
     fields: [replies.parentId],
     references: [replies.id],
+    relationName: "parent",
   }),
-  replies: many(replies),
+  replies: many(replies, { relationName: "replies" }),
   author: one(profiles, {
     fields: [replies.authorId],
     references: [profiles.id],

@@ -16,12 +16,9 @@ export default function RootLayout({
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en" className={`${sans.variable}`}>
-      <body>
-        <main className="min-h-screen border-t-4 border-sky-800">
-          <Navigation />
-
-          {children}
-        </main>
+      <body className="flex min-h-screen flex-col">
+        <Navigation />
+        <main className="flex-1 bg-gray-100">{children}</main>
       </body>
     </html>
   );

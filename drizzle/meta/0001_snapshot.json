@@ -1,8 +1,8 @@
 {
   "version": "5",
   "dialect": "mysql",
-  "id": "55d86b93-c21d-453b-aeb6-98362998d1e6",
-  "prevId": "479e79da-9da7-4b7d-b81a-ba114b090461",
+  "id": "e119311e-1519-4bef-925c-6f2081ee2d83",
+  "prevId": "1de709d3-7a95-4795-8dc3-2542aff0a5ec",
   "tables": {
     "event": {
       "name": "event",
@@ -78,6 +78,65 @@
           "name": "event_id",
           "columns": [
             "id"
+          ]
+        }
+      },
+      "uniqueConstraints": {},
+      "checkConstraint": {}
+    },
+    "like": {
+      "name": "like",
+      "columns": {
+        "userId": {
+          "name": "userId",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "postId": {
+          "name": "postId",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "like_userId_user_id_fk": {
+          "name": "like_userId_user_id_fk",
+          "tableFrom": "like",
+          "tableTo": "user",
+          "columnsFrom": [
+            "userId"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "like_postId_post_id_fk": {
+          "name": "like_postId_post_id_fk",
+          "tableFrom": "like",
+          "tableTo": "post",
+          "columnsFrom": [
+            "postId"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {
+        "like_userId_postId_pk": {
+          "name": "like_userId_postId_pk",
+          "columns": [
+            "userId",
+            "postId"
           ]
         }
       },
@@ -180,6 +239,14 @@
           "primaryKey": false,
           "notNull": false,
           "autoincrement": false
+        },
+        "likes": {
+          "name": "likes",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": 0
         },
         "createdAt": {
           "name": "createdAt",
@@ -733,10 +800,7 @@
   "views": {},
   "_meta": {
     "schemas": {},
-    "tables": {
-      "\"organizations\"": "\"organization\"",
-      "\"users_to_tags\"": "\"subscription\""
-    },
+    "tables": {},
     "columns": {}
   },
   "internal": {
