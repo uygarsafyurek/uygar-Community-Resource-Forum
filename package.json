@@ -20,7 +20,7 @@
     "format:write": "prettier --write \"**/*.{ts,tsx,js,jsx,mdx}\" --cache",
     "lint": "eslint src",
     "lint:fix": "eslint --fix src",
-    "postinstall": "if [ \"$VERCEL\" != \"1\" ]; then pnpm docker:reset && pnpm docker:build; else echo 'Skipping docker build on Vercel'; fi",
+    "postinstall": "node -e \"if (!process.env.VERCEL) { require('child_process').execSync('pnpm docker:reset && pnpm docker:build', { stdio: 'inherit' }) } else { console.log('Skipping docker build on Vercel') }\"",
     "preview": "next build && next start",
     "start": "next start",
     "sync-upstream": "git fetch && git branch | grep -Po '\\Kfeature/.*' | xargs -i sh -c 'git checkout {} && git pull upstream main && git push upstream {}'",
