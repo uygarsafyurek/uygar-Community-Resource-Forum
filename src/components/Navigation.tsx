@@ -42,6 +42,16 @@ export default async function Navigation() {
             >
               <Dropdown.Item asChild>
                 <Link
+                  href="/profile-view"
+                  className="flex items-center gap-3 py-1 pr-6 pl-3 transition-colors hover:bg-gray-200"
+                >
+                  <PiPlus />
+                  Profile
+                </Link>
+              </Dropdown.Item>
+
+              <Dropdown.Item asChild>
+                <Link
                   href="/draft"
                   className="flex items-center gap-3 py-1 pr-6 pl-3 transition-colors hover:bg-gray-200"
                 >
